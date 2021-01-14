@@ -8,9 +8,11 @@ public class LibrarySystem {
     
     private static Scanner input = new Scanner(System.in);
     private static ArrayList<Book> Booklist = new ArrayList<>();
+    private static ArrayList<Borrowers> Borrowerlist = new ArrayList<>();
     
     public static void main(String[] args) {
-            mainMenu();
+        Booklist = fileHandling.readFile();
+        mainMenu();
     }
     
     public static void mainMenu(){
@@ -20,6 +22,7 @@ public class LibrarySystem {
             System.out.println("1- Add book");
             System.out.println("2- View all books");
             System.out.println("3- Edit book");
+            System.out.println("4- Delete book");
             System.out.println("0 - Exit");
 
             int userChoice = input.nextInt();
@@ -34,7 +37,11 @@ public class LibrarySystem {
                 case 3:
                     editBook();
                     break;
+                case 4:
+                    deleteBook();
+                    break;
                 case 0:
+                    fileHandling.writeFile(Booklist);
                     System.exit(0);
                     break;
             }
@@ -63,7 +70,7 @@ public class LibrarySystem {
         
         System.out.println(myBook.toString());
     }
-    
+    //doesnt view books in file
     public static void viewBooks(){
         //loop through the arraylist
         if(Booklist.isEmpty()){
@@ -77,22 +84,8 @@ public class LibrarySystem {
     }
     
     public static void editBook(){
-        //choose which book you hat to edit
         
-        //search for the names in the obj in the array
-        System.out.println("Enter ISBN of book");
-        String ISBN = input.next();
-        
-        int index = -1; //to set as the book they have typed in
-        
-        if(!Booklist.isEmpty()){
-            for (int i = 0; i < Booklist.size(); i++) {
-                if(ISBN.equals(Booklist.get(i).getISBN())){
-                    index = i;
-                    break;
-                }
-            }
-        }
+        int index = ISBNsearch();
     
 
         if(index != -1){
@@ -138,9 +131,113 @@ public class LibrarySystem {
                     Booklist.get(index).setGenre(newGenre);
                     break;
                 }
+            System.out.println("Done, your book has been changed to "+Booklist.get(index).toString());
         }
         else{
             System.out.println("Book not found");
         }
     }   
+
+    private static void deleteBook() {
+        
+        int index = ISBNsearch();
+    
+
+        if(index != -1){
+            Booklist.remove(index);
+        }
+        else{
+            System.out.println("Book not found");
+        }
+    }
+    
+    private static int ISBNsearch(){
+            
+        System.out.println("Enter ISBN of book");
+        String ISBN = input.next();
+        
+        if(!Booklist.isEmpty()){
+            for (int i = 0; i < Booklist.size(); i++) {
+                if(ISBN.equals(Booklist.get(i).getISBN())){
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+    
+    public static void addBorrowers(){
+        System.out.println("Enter name of borrower");
+        input.nextLine();// to prevent skipping lines
+        String name = input.nextLine();
+        System.out.println("Enter ISBN of book being borrowed");
+        String books = input.next();
+        System.out.println("Enter ethe email of borrower");
+        input.nextLine();// to prevent skipping lines
+        String email = input.next();
+        System.out.println("Enter the home address off borrower");
+        input.nextLine();// to prevent skipping line
+        String address = input.next();
+        
+        Borrowers BorrowerDetails = new Borrowers(name,books,email,address);
+        Borrowerlist.add(BorrowerDetails);
+        
+        System.out.println(BorrowerDetails.toString());
+    }
+    
+    public static void editBorrowers(){
+        //borrowers searcg=h
+        int index = ISBNsearch();
+    
+
+        if(index != -1){
+            System.out.println("What would you like to edit?");
+            System.out.println("1 - Name");
+            System.out.println("2 - Books");
+            System.out.println("3 - Email");
+            System.out.println("4 - Address");
+
+            int userChoice = input.nextInt();
+
+            switch(userChoice){
+                case 1:
+                    System.out.println("Please type in a name");
+                    String newName = input.nextLine();
+                    Borrowerlist.get(index).setbName(newName);
+                    break;
+                case 2:
+                    System.out.println("Please type in a ISBN");
+                    String newBook = input.nextLine();
+                    Borrowerlist.get(index).setBooks(newBook);
+                    break;
+                case 3:
+                    System.out.println("Please type in a author");
+                    String newEmail = input.nextLine();
+                    Borrowerlist.get(index).setEmail(newEmail);
+                    break;
+                case 4:
+                    System.out.println("Please type in a price");
+                    String newAddress = input.next();
+                    Borrowerlist.get(index).setAddress(newAddress);
+                    break;
+            }
+            System.out.println("Done, your book has been changed to "+Borrowerlist.get(index).toString());
+        }
+        else{
+            System.out.println("Book not found");
+        }
+    }
+    
+    public static void deleteBorrowers(){
+        //borrowers searcg=h
+        int index = ISBNsearch();
+    
+
+        if(index != -1){
+            Borrowerlist.remove(index);
+        }
+        else{
+            System.out.println("Book not found");
+        }
+    }
 }

@@ -21,7 +21,7 @@ public class Book {
 
     
     public String toString(){
-        return name+" , "+ISBN+" , "+price+" , "+releaseDate+" , "+genre;
+        return name+" , "+ISBN+" , "+author+" , "+price+" , "+releaseDate+" , "+genre;
     }
 
     public String getName() {
